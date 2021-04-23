@@ -2,10 +2,7 @@
 title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
-  - python
-  - javascript
+  - shell: cURL
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
@@ -21,115 +18,127 @@ code_clipboard: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+The Recursion.Space API is built on [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) principles. Our API has predictable resource-oriented URLs, accepts [form-encoded](<https://en.wikipedia.org/wiki/POST_(HTTP)#Use_for_submitting_web_forms>) request bodies, returns [JSON-encoded](https://www.json.org/json-en.html) responses, and uses standard HTTP response codes, authentication, and verbs.
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+API authentication is handled by a unique key generated for your account.
 
-This example API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
+If you need API support or would like to see how others are implementing the platform you will find our staff and community through our Discord server.
+
+<a target="_blank" rel="noopener noreferrer" href="https://discord.com/invite/KnFp4jd9AV" style="width: 100%">
+<img src="https://discordapp.com/api/guilds/790311269420630079/widget.png?style=banner2" alt="Discord Banner 2" style="max-width: 100%; margin: auto; display: block;"/>
+</a>
+
+<aside class="notice">
+BASE URL <code>https://api.recursion.space/v1/</code>
+</aside>
 
 # Authentication
 
 > To authorize, use this code:
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
 ```shell
 # With shell, you can just pass the correct header with each request
-curl "api_endpoint_here" \
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
+curl "https://api.recursion.space/v1/" \
+  -H "Authorization: Token YOUR_API_KEY_HERE"
 ```
 
 > Make sure to replace `meowmeowmeow` with your API key.
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+Recursion.Space uses API keys to allow access to the API. You can obtain an API key under the developer tab on your dashboard.
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
+Your API key grants privlaged access to your account and by extention spaces, so be sure to keep it secure! Do not share your API keys in publicly accessible areas such as GitHUB, client-side code, and so forth.
 
-`Authorization: meowmeowmeow`
+`Token: YOUR API KEY HERE`
 
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+<aside class="warning">
+All API requests must include the API key and be made over HTTPS, requests that do not meet these requirements will fail.
 </aside>
 
-# Kittens
+# Language Libraries
 
-## Get All Kittens
+Language libraries will be added as they become available, to find community libraries vist Discord.
 
-```ruby
-require 'kittn'
+# SPACE
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
+## Operators Details
 
 ```shell
-curl "http://example.com/api/kittens" \
-  -H "Authorization: meowmeowmeow"
+curl "https://api.recursion.space/v1/operators" \
+  -H "Authorization: Token "
 ```
 
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
+> The above command returns JSON for all operators, structured like this:
 
 ```json
 [
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+    "facility": ,
+    "cardNumber": ,
+    "phone_number": ,
+    "address": ,
+    "city": ,
+    "state": ,
+    "zip_code": ,
+    "username": ,
+    "first_name": ,
+    "last_name": ,
+    "email": ,
   }
 ]
 ```
 
-This endpoint retrieves all kittens.
+Retrive information for all operators ("admins") of your space.
+
+## Member Details
+
+```shell
+curl "https://api.recursion.space/v1/members/" \
+  -H "Token: meowmeowmeow"
+```
+
+> The above command returns JSON for all members, structured like this:
+
+```json
+[
+  {
+    "cardNumber": "0123456789",
+    "access_group": 123,
+    "phone_number": "calico",
+    "address": 6,
+    "city": 7,
+    "state": ,
+    "zip_code": ,
+    "username": ,
+    "first_name": ,
+    "last_name": ,
+    "email": ,
+    "restricted_nodes": []
+  },
+]
+```
+
+Retrive information for all members associated with your space.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`GET http://api.recursion.space/v1/members`
 
 ### Query Parameters
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+| Parameter        | Default | Description                                                               |
+| ---------------- | ------- | ------------------------------------------------------------------------- |
+| cardNumber       | null    | The RFID number assigned to your member.                                  |
+| access_group     | null    | The ID for the access group that the member belongs to.                   |
+| phone_number     | null    | Member provided phone number.                                             |
+| address          | null    | Member provided address.                                                  |
+| city             | null    | City component of address provided by member.                             |
+| state            | null    | State component of address provided by member.                            |
+| zip_code         | null    | Zip Code component of address provided by member.                         |
+| username         | null    | Username assosiated with the members account.                             |
+| first_name       | null    | Members first name.                                                       |
+| last_name        | null    | Members last name.                                                        |
+| email            | null    | Member provided email.                                                    |
+| restricted_nodes | null    | List of ids the member does not have access to within their access group. |
 
 <aside class="success">
 Remember — a happy kitten is an authenticated kitten!
@@ -157,10 +166,10 @@ curl "http://example.com/api/kittens/2" \
 ```
 
 ```javascript
-const kittn = require('kittn');
+const kittn = require('kittn')
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+let api = kittn.authorize('meowmeowmeow')
+let max = api.kittens.get(2)
 ```
 
 > The above command returns JSON structured like this:
@@ -185,9 +194,9 @@ This endpoint retrieves a specific kitten.
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+| Parameter | Description                      |
+| --------- | -------------------------------- |
+| ID        | The ID of the kitten to retrieve |
 
 ## Delete a Specific Kitten
 
@@ -212,10 +221,10 @@ curl "http://example.com/api/kittens/2" \
 ```
 
 ```javascript
-const kittn = require('kittn');
+const kittn = require('kittn')
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
+let api = kittn.authorize('meowmeowmeow')
+let max = api.kittens.delete(2)
 ```
 
 > The above command returns JSON structured like this:
@@ -223,7 +232,7 @@ let max = api.kittens.delete(2);
 ```json
 {
   "id": 2,
-  "deleted" : ":("
+  "deleted": ":("
 }
 ```
 
@@ -235,7 +244,10 @@ This endpoint deletes a specific kitten.
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+| Parameter | Description                    |
+| --------- | ------------------------------ |
+| ID        | The ID of the kitten to delete |
 
+# HUB
+
+# NODE
